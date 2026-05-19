@@ -1,106 +1,242 @@
 {
-  "gridSize": 5,
-  "mineCount": 3,
-  "cellData": {
+  "brain": {
+    "name": "NAYKROZ",
+    "version": "1.0",
+    "mode": "adaptive_predictor",
+    "learning": true,
+    "autoAnalyze": true,
+    "autoUpdateScores": true
+  },
+
+  "grid": {
+    "size": 5,
+    "totalCells": 25,
+    "mineCount": 3
+  },
+
+  "strategy": {
+    "mode": "hybrid",
+
+    "algorithms": {
+
+      "probability": {
+        "enabled": true,
+        "weight": 0.35,
+        "formula": "safe / (safe + mine)"
+      },
+
+      "heatmap": {
+        "enabled": true,
+        "weight": 0.20,
+        "preferCenter": false,
+        "preferEdges": true
+      },
+
+      "reinforcement": {
+        "enabled": true,
+        "weight": 0.15,
+
+        "reward": {
+          "safeClick": 10,
+          "win": 25
+        },
+
+        "punishment": {
+          "mineClick": -20,
+          "loss": -35
+        }
+      },
+
+      "patterns": {
+        "enabled": true,
+        "weight": 0.15,
+
+        "track": [
+          "streaks",
+          "repeatedMines",
+          "safeSequences",
+          "centerBias",
+          "edgeBias"
+        ]
+      },
+
+      "bayesian": {
+        "enabled": true,
+        "weight": 0.10
+      },
+
+      "entropy": {
+        "enabled": true,
+        "weight": 0.05,
+        "detectRngBias": true
+      }
+    }
+  },
+
+  "prediction": {
+
+    "maxPredictions": 5,
+
+    "sorting": "highest_probability",
+
+    "minimumConfidence": 0.60,
+
+    "avoidRecentMines": true,
+
+    "preferHighStreakCells": true,
+
+    "adaptiveRisk": true
+  },
+
+  "cells": {
+
     "0": {
       "safe": 23,
-      "mine": 26
+      "mine": 26,
+      "streak": 2,
+      "confidence": 0.47,
+      "lastResults": [
+        "safe",
+        "mine",
+        "safe"
+      ]
     },
+
     "1": {
       "safe": 17,
-      "mine": 26
+      "mine": 26,
+      "streak": 1,
+      "confidence": 0.39,
+      "lastResults": [
+        "mine",
+        "mine",
+        "safe"
+      ]
     },
+
     "2": {
       "safe": 59,
-      "mine": 22
+      "mine": 22,
+      "streak": 7,
+      "confidence": 0.72,
+      "lastResults": [
+        "safe",
+        "safe",
+        "safe"
+      ]
     },
+
     "3": {
       "safe": 15,
-      "mine": 27
+      "mine": 27,
+      "streak": 0,
+      "confidence": 0.35,
+      "lastResults": [
+        "mine",
+        "safe",
+        "mine"
+      ]
     },
+
     "4": {
       "safe": 65,
-      "mine": 24
-    },
-    "5": {
-      "safe": 62,
-      "mine": 22
-    },
-    "6": {
-      "safe": 19,
-      "mine": 22
-    },
-    "7": {
-      "safe": 37,
-      "mine": 21
-    },
-    "8": {
-      "safe": 19,
-      "mine": 26
-    },
-    "9": {
-      "safe": 20,
-      "mine": 24
-    },
-    "10": {
-      "safe": 63,
-      "mine": 25
-    },
-    "11": {
-      "safe": 48,
-      "mine": 18
-    },
-    "12": {
-      "safe": 51,
-      "mine": 18
-    },
-    "13": {
-      "safe": 11,
-      "mine": 36
-    },
-    "14": {
-      "safe": 20,
-      "mine": 21
-    },
-    "15": {
-      "safe": 17,
-      "mine": 24
-    },
-    "16": {
-      "safe": 19,
-      "mine": 27
-    },
-    "17": {
-      "safe": 68,
-      "mine": 20
-    },
-    "18": {
-      "safe": 11,
-      "mine": 26
-    },
-    "19": {
-      "safe": 10,
-      "mine": 27
-    },
-    "20": {
-      "safe": 12,
-      "mine": 22
-    },
-    "21": {
-      "safe": 12,
-      "mine": 24
-    },
-    "22": {
-      "safe": 12,
-      "mine": 25
-    },
-    "23": {
-      "safe": 12,
-      "mine": 30
-    },
-    "24": {
-      "safe": 17,
-      "mine": 17
+      "mine": 24,
+      "streak": 8,
+      "confidence": 0.73,
+      "lastResults": [
+        "safe",
+        "safe",
+        "safe"
+      ]
     }
+  },
+
+  "adaptiveRules": [
+
+    {
+      "if": "recentLosses > 3",
+      "action": "reduceRisk"
+    },
+
+    {
+      "if": "safeStreak > 5",
+      "action": "increaseConfidence"
+    },
+
+    {
+      "if": "sameCellMineRepeated",
+      "action": "temporaryBlacklist"
+    },
+
+    {
+      "if": "entropyLow",
+      "action": "detectPatternMode"
+    }
+  ],
+
+  "riskManager": {
+
+    "enabled": true,
+
+    "maxRisk": 0.65,
+
+    "cashout": {
+      "enabled": true,
+      "targetMultiplier": 1.80
+    },
+
+    "stopAfterLosses": 5
+  },
+
+  "overlay": {
+
+    "enabled": true,
+
+    "theme": "orange_black",
+
+    "bestCellColor": "#ff9900",
+
+    "opacity": 0.35,
+
+    "glow": true,
+
+    "showConfidence": true,
+
+    "showProbability": true
+  },
+
+  "rngAnalysis": {
+
+    "enabled": true,
+
+    "trackNonce": true,
+
+    "trackTimestamp": true,
+
+    "trackPatterns": true,
+
+    "saveHistory": true
+  },
+
+  "memory": {
+
+    "saveGames": true,
+
+    "maxHistory": 100000,
+
+    "saveLocally": true,
+
+    "mergeRemoteData": true
+  },
+
+  "aiBehavior": {
+
+    "explorationRate": 0.15,
+
+    "exploitationRate": 0.85,
+
+    "selfLearning": true,
+
+    "dynamicScoring": true
   }
 }
